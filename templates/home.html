@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home | MamaCare</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Add Poppins font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffeef2 100%);
+            color: #5a3d5c;
+            min-height: 100vh;
+        }
+
+        /* Decorative elements */
+        .decoration {
+            position: absolute;
+            pointer-events: none;
+            z-index: -1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 175, 204, 0.1), rgba(255, 200, 221, 0.05));
+        }
+
+        .decoration-1 {
+            top: 10%;
+            right: 10%;
+            width: 120px;
+            height: 120px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        .decoration-2 {
+            bottom: 15%;
+            left: 10%;
+            width: 150px;
+            height: 150px;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+
+        /* Header */
+        .center-title {
+            text-align: center;
+            padding: 50px 20px 25px;
+            background: rgba(255, 255, 255, 0.95);
+            margin: 20px 20px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.1);
+            border: 1px solid #ffd6e0;
+            backdrop-filter: blur(10px);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .center-title::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffafcc, #ffc8dd, #ffafcc);
+        }
+
+        .center-title h1 {
+            margin: 0;
+            font-size: 42px;
+            color: #d46a8c;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(212, 106, 140, 0.1);
+        }
+
+        .center-title p {
+            margin-top: 12px;
+            font-size: 16px;
+            color: #7a5a7b;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+
+        .nav-bar a {
+            text-decoration: none;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #ffc8dd;
+            color: #d46a8c;
+            cursor: pointer;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 200, 221, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 175, 204, 0.3);
+            border-color: transparent;
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Content card */
+        .content-box {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(255, 182, 193, 0.15);
+            border: 1px solid #ffd6e0;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffafcc, #ffc8dd, #ffafcc);
+        }
+
+        .content-box h3 {
+            margin-top: 0;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #d46a8c;
+            font-size: 26px;
+            letter-spacing: 0.5px;
+        }
+
+        .content-box p {
+            line-height: 1.8;
+            font-size: 16px;
+            color: #7a5a7b;
+            margin-bottom: 20px;
+        }
+
+        /* Features list */
+        .features-list {
+            margin: 30px 0;
+            padding-left: 20px;
+        }
+
+        .features-list li {
+            margin-bottom: 15px;
+            color: #7a5a7b;
+            font-size: 15px;
+            padding-left: 10px;
+            position: relative;
+        }
+
+        .features-list li::before {
+            content: "🌸";
+            position: absolute;
+            left: -20px;
+        }
+
+        /* CTA */
+        .cta {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #ffd6e0;
+        }
+
+        .primary-btn {
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 175, 204, 0.3);
+        }
+
+        .primary-btn:hover {
+            background: linear-gradient(135deg, #ffc8dd 0%, #ffafcc 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 175, 204, 0.4);
+            padding: 16px 45px;
+        }
+
+        .primary-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-box {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .center-title {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .content-box {
+                margin: 20px;
+                padding: 35px 25px;
+            }
+
+            .center-title {
+                margin: 20px;
+                padding: 40px 20px 25px;
+            }
+
+            .center-title h1 {
+                font-size: 34px;
+            }
+
+            .nav-bar {
+                gap: 10px;
+                margin-bottom: 30px;
+            }
+
+            .nav-btn {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+
+            .content-box h3 {
+                font-size: 22px;
+            }
+
+            .primary-btn {
+                padding: 14px 30px;
+                font-size: 15px;
+            }
+
+            .decoration-1,
+            .decoration-2 {
+                display: none;
+            }
+        }
+
+        /* Welcome message */
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 18px;
+            color: #d46a8c;
+            font-weight: 500;
+            padding: 15px;
+            background: rgba(255, 245, 247, 0.5);
+            border-radius: 12px;
+            border: 1px solid #ffd6e0;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Decorative elements -->
+<div class="decoration decoration-1"></div>
+<div class="decoration decoration-2"></div>
+
+<!-- BRAND -->
+<div class="center-title">
+    <h1>MamaCare</h1>
+    <p>Maternal Health Risk Assessment System</p>
+</div>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="logo">🤍 MamaCare</div>
+
+  <ul class="menu">
+    <li><a href="/home" class="nav-link active">Home</a></li>
+    <li><a href="/history" class="nav-link">Health Status</a></li>
+    <li><a href="/assessment" class="nav-link">Assessment</a></li>
+    <li><a href="/logout" class="nav-link logout-btn">Sign Out</a></li>
+  </ul>
+</nav>
+
+
+<!-- CONTENT -->
+<div class="content-box">
+    <h3>Why Maternal Health Risk Assessment Matters</h3>
+
+    <p>
+        Maternal health risk assessment enables early identification of potential
+        pregnancy-related complications. Monitoring vital parameters such as blood
+        pressure, blood sugar, temperature, and heart rate supports timely clinical
+        decisions and improved outcomes.
+    </p>
+
+    <p>
+        MamaCare leverages machine learning models to evaluate maternal health risks
+        and provide personalized recommendations for preventive care.
+    </p>
+
+    <ul class="features-list">
+        <li>Early detection of pregnancy complications</li>
+        <li>Personalized health recommendations</li>
+        <li>Regular monitoring of vital parameters</li>
+        <li>AI-powered risk assessment</li>
+        <li>Secure and private health tracking</li>
+    </ul>
+
+    <div class="cta">
+        <a href="/assessment">
+            <button class="primary-btn">
+                Start Health Risk Assessment
+            </button>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

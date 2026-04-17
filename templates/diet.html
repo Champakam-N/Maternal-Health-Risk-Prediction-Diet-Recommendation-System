@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diet Recommendation | MamaCare</title>
+    
+    <!-- Add Poppins font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffeef2 100%);
+            color: #5a3d5c;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Decorative elements */
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 175, 204, 0.1), rgba(255, 200, 221, 0.05));
+        }
+
+        .decoration-1 {
+            top: 10%;
+            left: 10%;
+            width: 120px;
+            height: 120px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        .decoration-2 {
+            bottom: 10%;
+            right: 10%;
+            width: 150px;
+            height: 150px;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(255, 182, 193, 0.15);
+            border: 1px solid #ffd6e0;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffafcc, #ffc8dd, #ffafcc);
+        }
+
+        h3 {
+            margin-top: 0;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #d46a8c;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffd6e0;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 32px;
+            color: #d46a8c;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #ffafcc, #ffc8dd, #ffafcc);
+            border-radius: 2px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ffd6e0;
+            margin: 35px 0;
+        }
+
+        ul {
+            padding-left: 25px;
+            line-height: 1.8;
+            font-size: 16px;
+            color: #7a5a7b;
+        }
+
+        ul li {
+            margin-bottom: 12px;
+            padding-left: 10px;
+            position: relative;
+        }
+
+        ul li::before {
+            content: "•";
+            color: #ffafcc;
+            font-size: 24px;
+            position: absolute;
+            left: -18px;
+            top: -2px;
+        }
+
+        .summary {
+            background: linear-gradient(135deg, rgba(255, 214, 224, 0.2) 0%, rgba(255, 200, 221, 0.1) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #ffd6e0;
+        }
+
+        .summary li {
+            font-size: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .summary li::before {
+            content: "🌸";
+            font-size: 16px;
+            left: -22px;
+            top: 0;
+        }
+
+        .summary b {
+            color: #d46a8c;
+            font-weight: 600;
+            min-width: 160px;
+            display: inline-block;
+        }
+
+        .note {
+            font-size: 14px;
+            color: #9d4b6b;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 214, 224, 0.2) 0%, rgba(255, 200, 221, 0.1) 100%);
+            border-radius: 12px;
+            border-left: 4px solid #ffafcc;
+            line-height: 1.6;
+        }
+
+        .note::before {
+            content: "⚠";
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #ffd6e0;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn {
+            background: linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 175, 204, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 175, 204, 0.4);
+        }
+
+        .home-btn:hover {
+            background: linear-gradient(135deg, #ffc8dd 0%, #ffafcc 100%);
+        }
+
+        /* Food sections */
+        .food-section {
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .food-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-icon {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .good-icon {
+            color: #27ae60;
+        }
+
+        .avoid-icon {
+            color: #e74c3c;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 35px 25px;
+                margin: 20px;
+            }
+
+            .page-title {
+                font-size: 26px;
+            }
+
+            h3 {
+                font-size: 20px;
+            }
+
+            ul {
+                font-size: 15px;
+            }
+
+            .summary b {
+                min-width: 120px;
+            }
+
+            .btn {
+                padding: 14px 30px;
+                font-size: 15px;
+            }
+
+            .decoration-1,
+            .decoration-2 {
+                display: none;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 10px;
+            }
+            
+            .container {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .btn-container {
+                display: none;
+            }
+            
+            .decoration-1,
+            .decoration-2 {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Decorative elements -->
+<div class="decoration decoration-1"></div>
+<div class="decoration decoration-2"></div>
+
+<div class="container">
+
+    <div class="page-title">🍎 Personalized Diet Plan</div>
+
+    <div class="summary">
+        <h3>Your Pregnancy Health Summary</h3>
+        <ul>
+            <li><b>Week:</b> {{ week }}</li>
+            <li><b>Trimester:</b> {{ trimester }}</li>
+            <li><b>BMI:</b> {{ bmi }}</li>
+            <li><b>Blood Pressure:</b> {{ systolic }}/{{ diastolic }} mmHg</li>
+            <li><b>Blood Sugar:</b> {{ sugar }} mg/dL</li>
+            <li><b>Heart Rate:</b> {{ hr }} bpm</li>
+            <li><b>Body Temperature:</b> {{ temp }} °C</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <div class="food-section">
+        <h3>
+            <span class="section-icon good-icon">✅</span>
+            Recommended Foods
+        </h3>
+        <ul>
+            {% for item in eat_list %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="food-section">
+        <h3>
+            <span class="section-icon avoid-icon">❌</span>
+            Foods to Avoid
+        </h3>
+        <ul>
+            {% for item in avoid_list %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <p class="note">
+        Dietary recommendations are indicative and intended for educational purposes only.
+        Always consult a healthcare professional for personalized guidance.
+    </p>
+
+    <div class="btn-container">
+        <a href="/home">
+            <button class="btn home-btn">
+                🏠 Back to Home
+            </button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

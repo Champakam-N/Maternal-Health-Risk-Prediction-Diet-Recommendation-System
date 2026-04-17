@@ -1,0 +1,264 @@
+/* ===== GLOBAL ===== */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.pink-bg {
+    background: #ffe6ee;
+    min-height: 100vh;
+}
+
+/* ===== CENTER TITLE ===== */
+.center-title {
+    text-align: center;
+    padding: 25px 0 10px;
+}
+
+.center-title h1 {
+    font-size: 42px;
+    color: #ff5f8a;
+    margin-bottom: 5px;
+}
+
+.center-title p {
+    color: #555;
+    font-size: 16px;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+    height: calc(100vh - 160px);
+}
+
+/* ===== LEFT IMAGE ===== */
+.left {
+    width: 50%;
+    text-align: center;
+}
+
+.left img {
+    max-width: 100%;
+    max-height: 420px;   /* controls image size */
+    object-fit: contain;
+}
+
+/* ===== RIGHT LOGIN BOX ===== */
+.right {
+    width: 40%;
+    background: #fff0f5;
+    padding: 40px;
+    border-radius: 10px;
+}
+
+.right h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* ===== FORMS ===== */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 18px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.primary-btn {
+    background: #ff5f8a;
+    color: white;
+}
+
+.secondary-btn {
+    background: #ffb6c1;
+}
+
+/* ===== LINKS & ERRORS ===== */
+.link {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.link a {
+    color: #ff5f8a;
+    text-decoration: none;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* ===== COMMON BOXES ===== */
+.form-box, .content-box, .result-box, .table-box {
+    width: 65%;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    margin-top: 40px;
+    border-radius: 8px;
+}
+
+.form-box.wide {
+    width: 70%;
+}
+
+/* ===== TOP BAR ===== */
+.top-bar {
+    background: #ffccd5;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logout {
+    text-decoration: none;
+    color: #333;
+}
+
+/* ===== TABLE ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background: #ffe0e8;
+}
+
+/* ===== RISK COLORS ===== */
+.risk.low {
+    color: green;
+    font-size: 26px;
+}
+
+.risk.mid {
+    color: orange;
+    font-size: 26px;
+}
+
+.risk.high {
+    color: red;
+    font-size: 26px;
+}
+
+/* ===== HOME NAV BUTTONS ===== */
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* ===== ASSESSMENT PAGE ===== */
+.assessment-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 30px;
+}
+
+.assessment-box {
+    width: 45%;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+
+/* ===== ALERT POPUP ===== */
+.alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.alert-box {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    width: 350px;
+}
+/* ===== NAVBAR ===== */
+.navbar {
+  background: #d63384;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 40px;
+}
+
+.logo {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Menu */
+.menu {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Text-style buttons */
+.nav-link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding-bottom: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.nav-link:hover {
+  opacity: 0.85;
+}
+
+/* Active underline */
+.nav-link.active {
+  border-bottom: 2px solid white;
+}
+
+/* Sign Out pill button */
+.logout-btn {
+  background: #ffffff;
+  color: #d63384;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.logout-btn:hover {
+  background: #ffe6f0;
+}

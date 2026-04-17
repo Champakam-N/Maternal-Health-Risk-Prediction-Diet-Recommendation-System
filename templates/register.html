@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Account | MamaCare</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Add Poppins font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffeef2 100%);
+            color: #5a3d5c;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .form-box {
+            max-width: 450px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 45px 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(255, 182, 193, 0.15);
+            border: 1px solid #ffd6e0;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffafcc, #ffc8dd, #ffafcc);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+            color: #d46a8c;
+            font-size: 28px;
+            letter-spacing: 0.5px;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            font-size: 15px;
+            color: #7a5a7b;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            margin-top: 8px;
+            border-radius: 12px;
+            border: 2px solid #ffd6e0;
+            font-size: 15px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #5a3d5c;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: #ffafcc;
+            box-shadow: 0 0 0 3px rgba(255, 175, 204, 0.2);
+            background: white;
+        }
+
+        input::placeholder {
+            color: #c9a9b5;
+        }
+
+        .primary-btn {
+            width: 100%;
+            margin-top: 30px;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 175, 204, 0.3);
+        }
+
+        .secondary-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #ffc8dd;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            color: #d46a8c;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(255, 200, 221, 0.2);
+        }
+
+        .primary-btn:hover {
+            background: linear-gradient(135deg, #ffc8dd 0%, #ffafcc 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 175, 204, 0.4);
+        }
+
+        .secondary-btn:hover {
+            background: #fff5f7;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 200, 221, 0.3);
+        }
+
+        .primary-btn:active,
+        .secondary-btn:active {
+            transform: translateY(0);
+        }
+
+        .error {
+            background: linear-gradient(135deg, #ffd6e0 0%, #ffafcc 100%);
+            color: #9d4b6b;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #ffafcc;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(255, 175, 204, 0.2);
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 15px;
+            color: #7a5a7b;
+            padding-top: 25px;
+            border-top: 1px solid #ffd6e0;
+        }
+
+        .link a {
+            text-decoration: none;
+            color: #ff6b94;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .link a:hover {
+            color: #d46a8c;
+            background: #fff5f7;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 5px;
+        }
+
+        .password-requirements {
+            font-size: 12px;
+            color: #c9a9b5;
+            margin-top: 5px;
+            padding-left: 5px;
+        }
+
+        /* Style the back button container */
+        a[href="/"] {
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 500px) {
+            .form-box {
+                padding: 35px 25px;
+                margin: 20px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            input {
+                padding: 12px 14px;
+            }
+            
+            .primary-btn,
+            .secondary-btn {
+                padding: 14px;
+            }
+        }
+
+        /* Animation for form */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-box {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="form-box">
+
+    <!-- Back -->
+    <a href="/">
+        <button class="secondary-btn">← Back to Login</button>
+    </a>
+
+    <h2>Create Account</h2>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+        <div class="form-group">
+            <label>First Name</label>
+            <input type="text" name="first_name" pattern="[A-Za-z]+" required 
+                   placeholder="Enter your first name">
+        </div>
+
+        <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" name="last_name" pattern="[A-Za-z]+" required 
+                   placeholder="Enter your last name">
+        </div>
+
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" required 
+                   placeholder="Enter your email">
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" required 
+                   placeholder="Create a secure password">
+            <div class="password-requirements">Use at least 8 characters</div>
+        </div>
+
+        <button type="submit" class="primary-btn">Register</button>
+    </form>
+
+    <p class="link">
+        Already have an account?
+        <a href="/">Login</a>
+    </p>
+</div>
+
+</body>
+</html>

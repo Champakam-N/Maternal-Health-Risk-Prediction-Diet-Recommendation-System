@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Health Risk Alert | MamaCare</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Add Poppins font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffeef2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Decorative elements */
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 175, 204, 0.2), rgba(255, 200, 221, 0.1));
+        }
+
+        .decoration-1 {
+            top: 10%;
+            left: 10%;
+            width: 120px;
+            height: 120px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        .decoration-2 {
+            bottom: 10%;
+            right: 10%;
+            width: 150px;
+            height: 150px;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+
+        /* Overlay */
+        .alert-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Alert box */
+        .alert-box {
+            background: rgba(255, 255, 255, 0.98);
+            width: 420px;
+            padding: 45px 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            border: 2px solid #ffd6e0;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .alert-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        /* Risk-specific top borders */
+        .risk-high.alert-box::before {
+            background: linear-gradient(90deg, #ff4d4d, #ff9999, #ff4d4d);
+        }
+
+        .risk-mid.alert-box::before {
+            background: linear-gradient(90deg, #ffb366, #ffd699, #ffb366);
+        }
+
+        .risk-low.alert-box::before {
+            background: linear-gradient(90deg, #66cc99, #99e6b3, #66cc99);
+        }
+
+        .alert-box h2 {
+            margin-top: 0;
+            font-weight: 600;
+            color: #d46a8c;
+            font-size: 26px;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .risk-text {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Risk colors */
+        .risk-high .risk-text {
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%);
+            color: #cc0000;
+            border: 3px solid #ff4d4d;
+        }
+
+        .risk-mid .risk-text {
+            background: linear-gradient(135deg, #fff2e6 0%, #ffe6cc 100%);
+            color: #e67300;
+            border: 3px solid #ffb366;
+        }
+
+        .risk-low .risk-text {
+            background: linear-gradient(135deg, #e6ffe6 0%, #ccffcc 100%);
+            color: #008000;
+            border: 3px solid #66cc99;
+        }
+
+        .alert-box p {
+            font-size: 16px;
+            color: #7a5a7b;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .countdown {
+            font-size: 18px;
+            font-weight: 600;
+            color: #d46a8c;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(255, 214, 224, 0.3);
+            border-radius: 10px;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .primary-btn {
+            margin-top: 25px;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 175, 204, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .primary-btn:hover {
+            background: linear-gradient(135deg, #ffc8dd 0%, #ffafcc 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 175, 204, 0.4);
+        }
+
+        .primary-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Risk-specific icons */
+        .risk-high .alert-icon {
+            color: #ff4d4d;
+        }
+
+        .risk-mid .alert-icon {
+            color: #ffb366;
+        }
+
+        .risk-low .alert-icon {
+            color: #66cc99;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .risk-text {
+            animation: pulse 2s infinite;
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            .alert-box {
+                width: 90%;
+                padding: 35px 25px;
+                margin: 20px;
+            }
+
+            .alert-box h2 {
+                font-size: 22px;
+            }
+
+            .risk-text {
+                font-size: 32px;
+                padding: 12px;
+            }
+
+            .alert-icon {
+                font-size: 40px;
+            }
+
+            .primary-btn {
+                padding: 14px 30px;
+                font-size: 15px;
+            }
+
+            .decoration-1,
+            .decoration-2 {
+                display: none;
+            }
+        }
+
+        /* Timer animation */
+        .timer-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 214, 224, 0.3);
+            border-radius: 3px;
+            margin: 25px 0;
+            overflow: hidden;
+        }
+
+        .timer-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s linear;
+        }
+
+        .risk-high .timer-bar {
+            background: linear-gradient(90deg, #ff4d4d, #ff9999);
+        }
+
+        .risk-mid .timer-bar {
+            background: linear-gradient(90deg, #ffb366, #ffd699);
+        }
+
+        .risk-low .timer-bar {
+            background: linear-gradient(90deg, #66cc99, #99e6b3);
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Decorative elements -->
+<div class="decoration decoration-1"></div>
+<div class="decoration decoration-2"></div>
+
+<div class="alert-overlay">
+    <div class="alert-box 
+        {% if 'high' in risk|lower %}risk-high
+        {% elif 'mid' in risk|lower %}risk-mid
+        {% else %}risk-low
+        {% endif %}">
+
+        <div class="alert-icon">
+            {% if 'high' in risk|lower %}⚠️
+            {% elif 'mid' in risk|lower %}🔔
+            {% else %}✅
+            {% endif %}
+        </div>
+
+        <h2>Health Risk Assessment</h2>
+
+        <p>Your predicted maternal health risk level is:</p>
+
+        <div class="risk-text">
+            {{ risk }}
+        </div>
+
+        <p>
+            Detailed results with personalized recommendations will be displayed on the next page.
+        </p>
+
+        <div class="timer-container">
+            <div class="timer-bar" id="timerBar"></div>
+        </div>
+
+        <div class="countdown" id="countdown">5</div>
+
+        <button class="primary-btn" onclick="goToResult()">
+            View Full Results
+        </button>
+
+    </div>
+</div>
+
+<script>
+    let seconds = 5;
+    const countdownElement = document.getElementById('countdown');
+    const timerBar = document.getElementById('timerBar');
+    
+    // Initial timer bar width
+    timerBar.style.width = '100%';
+    
+    function updateCountdown() {
+        seconds--;
+        countdownElement.textContent = seconds;
+        
+        // Update timer bar width
+        const percentage = (seconds / 5) * 100;
+        timerBar.style.width = percentage + '%';
+        
+        // Add animation when time is running out
+        if (seconds <= 2) {
+            countdownElement.style.color = '#ff4d4d';
+            countdownElement.style.animation = 'pulse 0.5s infinite';
+        }
+        
+        if (seconds <= 0) {
+            window.location.href = "/result";
+        } else {
+            setTimeout(updateCountdown, 1000);
+        }
+    }
+    
+    // Start countdown
+    setTimeout(updateCountdown, 1000);
+    
+    function goToResult() {
+        window.location.href = "/result";
+    }
+    
+    // Add keyboard shortcut
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            goToResult();
+        }
+        if (event.key === 'Escape') {
+            goToResult();
+        }
+    });
+</script>
+
+</body>
+</html>

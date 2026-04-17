@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Health Assessment | MamaCare</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Add Poppins font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffeef2 100%);
+            color: #5a3d5c;
+            min-height: 100vh;
+        }
+
+        /* Decorative elements */
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 175, 204, 0.1), rgba(255, 200, 221, 0.05));
+        }
+
+        .decoration-1 {
+            top: 10%;
+            left: 5%;
+            width: 100px;
+            height: 100px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        .decoration-2 {
+            bottom: 10%;
+            right: 5%;
+            width: 150px;
+            height: 150px;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+
+        /* Top bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 32px;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px solid #ffd6e0;
+            box-shadow: 0 2px 15px rgba(255, 182, 193, 0.1);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-bar h3 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 20px;
+            color: #d46a8c;
+            letter-spacing: 0.5px;
+        }
+
+        .logout {
+            text-decoration: none;
+            font-size: 15px;
+            color: #d46a8c;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: 2px solid #ffc8dd;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .logout:hover {
+            background: linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%);
+            color: white;
+            transform: translateY(-1px);
+            border-color: transparent;
+        }
+
+        /* Layout */
+        .assessment-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 0 30px;
+        }
+
+        .assessment-box, .upload-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 45px 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(255, 182, 193, 0.15);
+            border: 1px solid #ffd6e0;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .assessment-box::before, .upload-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffafcc, #ffc8dd, #ffafcc);
+        }
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-weight: 600;
+            color: #d46a8c;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #ffafcc, #ffc8dd);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 15px;
+            color: #7a5a7b;
+            font-weight: 500;
+        }
+
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 2px solid #ffd6e0;
+            font-size: 15px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #5a3d5c;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input[type="number"]:focus,
+        input[type="file"]:focus {
+            border-color: #ffafcc;
+            box-shadow: 0 0 0 3px rgba(255, 175, 204, 0.2);
+            background: white;
+        }
+
+        input::placeholder {
+            color: #c9a9b5;
+        }
+
+        .primary-btn {
+            width: 100%;
+            margin-top: 30px;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 175, 204, 0.3);
+        }
+
+        .secondary-btn {
+            padding: 14px 28px;
+            border: 2px solid #ffc8dd;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            color: #d46a8c;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(255, 200, 221, 0.2);
+        }
+
+        .primary-btn:hover {
+            background: linear-gradient(135deg, #ffc8dd 0%, #ffafcc 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 175, 204, 0.4);
+        }
+
+        .secondary-btn:hover {
+            background: linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 175, 204, 0.3);
+            border-color: transparent;
+        }
+
+        .primary-btn:active,
+        .secondary-btn:active {
+            transform: translateY(0);
+        }
+
+        .note {
+            font-size: 14px;
+            color: #9d4b6b;
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(255, 214, 224, 0.2) 0%, rgba(255, 200, 221, 0.1) 100%);
+            border-radius: 12px;
+            border-left: 4px solid #ffafcc;
+        }
+
+        .upload-instructions {
+            margin-top: 25px;
+            font-size: 14px;
+            color: #7a5a7b;
+            line-height: 1.6;
+        }
+
+        .upload-instructions ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .upload-instructions li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 10px;
+        }
+
+        .upload-instructions li::before {
+            content: "📄";
+            position: absolute;
+            left: -18px;
+        }
+
+        /* Form grid for better layout */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            .assessment-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 0 20px;
+                margin: 30px auto;
+            }
+
+            .assessment-box, .upload-box {
+                padding: 35px 25px;
+            }
+
+            .top-bar {
+                padding: 18px 20px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .top-bar h3 {
+                font-size: 18px;
+            }
+
+            .logout {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .decoration-1,
+            .decoration-2 {
+                display: none;
+            }
+        }
+
+        @media (min-width: 901px) and (max-width: 1100px) {
+            .assessment-container {
+                max-width: 900px;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .assessment-box, .upload-box {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .assessment-box {
+            animation-delay: 0.1s;
+        }
+
+        .upload-box {
+            animation-delay: 0.2s;
+        }
+
+        /* File upload styling */
+        input[type="file"] {
+            padding: 14px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #ffc8dd;
+            background: white;
+            color: #d46a8c;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: #fff5f7;
+            border-color: #ffafcc;
+        }
+
+        /* Form validation styling */
+        input:required:invalid {
+            border-color: #ffafcc;
+        }
+
+        input:required:valid {
+            border-color: #ffd6e0;
+        }
+
+        /* Help text */
+        .help-text {
+            font-size: 13px;
+            color: #c9a9b5;
+            margin-top: 4px;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Decorative elements -->
+<div class="decoration decoration-1"></div>
+<div class="decoration decoration-2"></div>
+
+<!-- TOP NAV -->
+<div class="top-bar">
+    <a href="/home" class="logout">← Home</a>
+    <h3>MamaCare – Health Risk Assessment</h3>
+    <a href="/logout" class="logout">Sign Out</a>
+</div>
+
+<!-- MAIN -->
+<div class="assessment-container">
+
+    <!-- MANUAL ENTRY -->
+    <div class="assessment-box">
+        <h3>Enter Health Details</h3>
+
+        <form method="POST" action="/assessment">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" name="age" id="age" step="0.1" required min="18" max="50">
+                    <div class="help-text">Years</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="gestational_week">Pregnancy Week</label>
+                    <input type="number" name="gestational_week" id="gestational_week" min="1" max="40" required>
+                    <div class="help-text">Weeks 1-40</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="systolic">Systolic BP</label>
+                    <input type="number" name="systolic" id="systolic" step="0.1" required min="70" max="200">
+                    <div class="help-text">mmHg</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="diastolic">Diastolic BP</label>
+                    <input type="number" name="diastolic" id="diastolic" step="0.1" required min="40" max="130">
+                    <div class="help-text">mmHg</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sugar">Blood Sugar</label>
+                    <input type="number" name="sugar" id="sugar" step="0.1" required min="50" max="300">
+                    <div class="help-text">mg/dL</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="temp">Body Temperature</label>
+                    <input type="number" name="temp" id="temp" step="0.1" required min="35" max="42">
+                    <div class="help-text">°C</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="heart_rate">Heart Rate</label>
+                    <input type="number" name="heart_rate" id="heart_rate" step="0.1" required min="40" max="200">
+                    <div class="help-text">bpm</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="height">Height</label>
+                    <input type="number" name="height" id="height" step="0.1" required min="120" max="200">
+                    <div class="help-text">cm</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Weight</label>
+                    <input type="number" name="weight" id="weight" step="0.1" required min="40" max="150">
+                    <div class="help-text">kg</div>
+                </div>
+            </div>
+
+            <button type="submit" class="primary-btn">
+                Assess Health Risk
+            </button>
+        </form>
+    </div>
+
+    <!-- UPLOAD -->
+    <div class="upload-box">
+        <h3>Upload Medical Report</h3>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="report">Choose a file</label>
+                <input type="file" name="report" id="report" accept=".pdf,.png,.jpg,.jpeg" required>
+            </div>
+
+            <button type="button" class="secondary-btn" onclick="uploadReport()">
+                 Upload & Auto-Fill
+            </button>
+        </form>
+
+        <div class="upload-instructions">
+            <p><strong>Supported formats:</strong></p>
+            <ul>
+                <li>PDF documents</li>
+                <li>JPG/JPEG images</li>
+                <li>PNG images</li>
+            </ul>
+            <p class="note">
+                After uploading, the system will attempt to extract health data from your medical report and auto-fill the form.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<!-- JS (with visual feedback) -->
+<script>
+function uploadReport() {
+    let fileInput = document.getElementById('report');
+    let button = event.currentTarget;
+    
+    if (!fileInput.files[0]) {
+        alert("Please select a file first.");
+        return;
+    }
+    
+    // Visual feedback
+    button.innerHTML = " Processing...";
+    button.disabled = true;
+    
+    let formData = new FormData(document.getElementById("uploadForm"));
+
+    fetch("/upload_report", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        button.innerHTML = "Uploaded";
+        
+        let filled = false;
+
+        if (data.age != null) { document.getElementById('age').value = data.age; filled = true; }
+        if (data.week != null) { document.getElementById('gestational_week').value = data.week; filled = true; }
+        if (data.height != null) { document.getElementById('height').value = data.height; filled = true; }
+        if (data.weight != null) { document.getElementById('weight').value = data.weight; filled = true; }
+        if (data.systolic != null) { document.getElementById('systolic').value = data.systolic; filled = true; }
+        if (data.diastolic != null) { document.getElementById('diastolic').value = data.diastolic; filled = true; }
+        if (data.sugar != null) {
+    let sugarValue = data.sugar;
+
+    // If OCR extracted mmol/L (usually < 20), convert to mg/dL
+    if (sugarValue < 20) {
+        sugarValue = sugarValue * 18;   // mmol/L → mg/dL
+        sugarValue = sugarValue.toFixed(1);
+    }
+
+    document.getElementById('sugar').value = sugarValue;
+    filled = true;
+}
+
+        if (data.temp != null) { document.getElementById('temp').value = data.temp; filled = true; }
+        if (data.heart_rate != null) { document.getElementById('heart_rate').value = data.heart_rate; filled = true; }
+
+        if (filled) {
+            alert(" Report values auto-filled successfully! Please review before submitting.");
+        } else {
+            alert(" Report uploaded, but no readable values were found. Please enter the data manually.");
+        }
+        
+        // Reset button after delay
+        setTimeout(() => {
+            button.innerHTML = " Upload & Auto-Fill";
+            button.disabled = false;
+        }, 2000);
+    })
+    .catch(() => {
+        alert(" Upload failed. Please try again.");
+        button.innerHTML = " Upload & Auto-Fill";
+        button.disabled = false;
+    });
+}
+</script>
+
+</body>
+</html>

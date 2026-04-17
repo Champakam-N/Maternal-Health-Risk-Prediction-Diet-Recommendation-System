@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Health History | MamaCare</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Add Poppins font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffeef2 100%);
+            color: #5a3d5c;
+            min-height: 100vh;
+        }
+
+        /* Decorative elements */
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 175, 204, 0.1), rgba(255, 200, 221, 0.05));
+        }
+
+        .decoration-1 {
+            top: 10%;
+            left: 5%;
+            width: 100px;
+            height: 100px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        .decoration-2 {
+            bottom: 10%;
+            right: 5%;
+            width: 150px;
+            height: 150px;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+
+        /* Header */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 32px;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px solid #ffd6e0;
+            box-shadow: 0 2px 15px rgba(255, 182, 193, 0.1);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-bar h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+            color: #d46a8c;
+            letter-spacing: 0.5px;
+        }
+
+        .logout {
+            text-decoration: none;
+            font-size: 15px;
+            color: #d46a8c;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: 2px solid #ffc8dd;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .logout:hover {
+            background: linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%);
+            color: white;
+            transform: translateY(-1px);
+            border-color: transparent;
+        }
+
+        /* Table container */
+        .table-box {
+            max-width: 1300px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(255, 182, 193, 0.15);
+            border: 1px solid #ffd6e0;
+            backdrop-filter: blur(10px);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .table-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffafcc, #ffc8dd, #ffafcc);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            min-width: 1100px;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #ffd6e0 0%, #ffc8dd 100%);
+            text-align: left;
+            padding: 16px 14px;
+            border-bottom: 2px solid #ffafcc;
+            font-weight: 600;
+            color: #9d4b6b;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #ffd6e0;
+            white-space: nowrap;
+            color: #7a5a7b;
+        }
+
+        tr {
+            transition: all 0.2s ease;
+        }
+
+        tr:hover {
+            background: rgba(255, 245, 247, 0.5);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.1);
+        }
+
+        /* Risk badge */
+        .risk-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.3px;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .risk-high {
+            background: linear-gradient(135deg, #ffd6e0 0%, #ffafcc 100%);
+            color: #9d4b6b;
+            border: 1px solid #ffafcc;
+        }
+
+        .risk-mid {
+            background: linear-gradient(135deg, #ffeef2 0%, #ffd6e0 100%);
+            color: #c97b95;
+            border: 1px solid #ffd6e0;
+        }
+
+        .risk-low {
+            background: linear-gradient(135deg, #fff5f7 0%, #ffeef2 100%);
+            color: #d46a8c;
+            border: 1px solid #ffc8dd;
+        }
+
+        /* CTA */
+        .download {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #ffd6e0;
+        }
+
+        .primary-btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 175, 204, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .primary-btn:hover {
+            background: linear-gradient(135deg, #ffc8dd 0%, #ffafcc 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 175, 204, 0.4);
+        }
+
+        .primary-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Status message */
+        .status-message {
+            text-align: center;
+            padding: 30px;
+            font-size: 16px;
+            color: #7a5a7b;
+            background: rgba(255, 245, 247, 0.5);
+            border-radius: 12px;
+            border: 1px solid #ffd6e0;
+            margin: 20px 0;
+        }
+
+        /* Table scrollbar styling */
+        .table-box::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+
+        .table-box::-webkit-scrollbar-track {
+            background: #ffeef2;
+            border-radius: 4px;
+        }
+
+        .table-box::-webkit-scrollbar-thumb {
+            background: #ffc8dd;
+            border-radius: 4px;
+        }
+
+        .table-box::-webkit-scrollbar-thumb:hover {
+            background: #ffafcc;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .table-box {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .table-box {
+                margin: 30px 20px;
+                padding: 25px 20px;
+            }
+
+            .top-bar {
+                padding: 18px 20px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .top-bar h2 {
+                font-size: 20px;
+            }
+
+            .logout {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 12px 10px;
+                font-size: 14px;
+            }
+
+            .decoration-1,
+            .decoration-2 {
+                display: none;
+            }
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7a5a7b;
+        }
+
+        .empty-state h3 {
+            color: #d46a8c;
+            margin-bottom: 15px;
+        }
+
+        .empty-state .primary-btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Decorative elements -->
+<div class="decoration decoration-1"></div>
+<div class="decoration decoration-2"></div>
+
+<!-- HEADER -->
+<div class="top-bar">
+    <h2>📊 Weekly Health Status</h2>
+    <a href="/home" class="logout">← Back to Home</a>
+</div>
+
+<!-- TABLE -->
+<div class="table-box">
+
+    {% if records %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Age</th>
+                    <th>Week</th>
+                    <th>Height (cm)</th>
+                    <th>Weight (kg)</th>
+                    <th>Systolic</th>
+                    <th>Diastolic</th>
+                    <th>Sugar</th>
+                    <th>Temp</th>
+                    <th>Heart Rate</th>
+                    <th>Risk Level</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for row in records %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                    <td>{{ row[5] }}</td>
+                    <td>{{ row[6] }}</td>
+                    <td>{{ row[7] }}</td>
+                    <td>{{ row[8] }}</td>
+                    <td>{{ row[9] }}</td>
+                    <td>
+                        <span class="risk-badge 
+                            {% if 'high' in row[10]|lower %}risk-high
+                            {% elif 'mid' in row[10]|lower %}risk-mid
+                            {% else %}risk-low
+                            {% endif %}">
+                            {{ row[10] }}
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="download">
+            <a href="/download_report">
+                <button class="primary-btn">
+                    📥 Download Health Report
+                </button>
+            </a>
+        </div>
+
+    {% else %}
+        <div class="empty-state">
+            <h3>No health records found</h3>
+            <p>Start your first health assessment to track your maternal health journey.</p>
+            <a href="/assessment">
+                <button class="primary-btn">
+                    Start Assessment
+                </button>
+            </a>
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
